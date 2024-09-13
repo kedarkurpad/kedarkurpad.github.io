@@ -17,16 +17,15 @@ section {
 }
 
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columns */
-    grid-gap: 20px; /* Space between images */
-    justify-items: center; /* Centers the content horizontally */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .grid-container img {
-    width: 100%; /* Ensures that images take up full width of their grid cells */
-    height: auto; /* Ensures aspect ratio is maintained */
-    max-width: 300px; /* Limits the maximum width to ensure they are not too large */
+    flex-basis: 45%; /* Adjust the percentage to ensure images fit well */
+    max-width: 100%;
+    height: auto;
 }
 
 .project-content {
