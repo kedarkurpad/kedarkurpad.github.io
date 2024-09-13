@@ -20,12 +20,13 @@ section {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* 2 columns */
     grid-gap: 20px; /* Space between images */
+    justify-items: center; /* Centers the content horizontally */
 }
 
 .grid-container img {
     width: 100%; /* Ensures that images take up full width of their grid cells */
-    height: auto; /* Maintains aspect ratio */
-    object-fit: cover; /* Ensures images cover the grid cell without distortion */
+    height: auto; /* Ensures aspect ratio is maintained */
+    max-width: 300px; /* Limits the maximum width to ensure they are not too large */
 }
 
 .project-content {
