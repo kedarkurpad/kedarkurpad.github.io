@@ -26,23 +26,14 @@
 <body>
   <h1>I Ching Reading</h1>
 
-  <!-- Input for dilemma -->
   <label for="question">Enter your dilemma:</label><br />
   <input type="text" id="question" placeholder="Or leave blank for random" size="50" /><br /><br />
 
-  <!-- Inputs for six tosses -->
-  <div id="tossInputs">
-    <p>Enter 3 coins per line (H/T), bottom to top:</p>
-    <div>Line 1: <input type="text" id="line1" size="4" placeholder="e.g. HHT"></div>
-    <div>Line 2: <input type="text" id="line2" size="4"></div>
-    <div>Line 3: <input type="text" id="line3" size="4"></div>
-    <div>Line 4: <input type="text" id="line4" size="4"></div>
-    <div>Line 5: <input type="text" id="line5" size="4"></div>
-    <div>Line 6: <input type="text" id="line6" size="4"></div>
-  </div>
+  <label for="lineInput">Enter 3 coins (H/T) for line <span id="lineNum">1</span> (bottom to top):</label><br />
+  <input type="text" id="lineInput" size="4" placeholder="e.g. HHT" /><br />
+  <button onclick="submitLine()">Submit Line</button>
+  <button onclick="resetReading()">Reset</button>
 
-  <br />
-  <button onclick="startReading()">Get Reading</button>
   <pre id="output"></pre>
 
   <script>
@@ -87,51 +78,54 @@
       "existential dread", "loss of direction"
     ];
 
+    let primaryVals = [], secondaryVals = [], visuals = [], secondaryVisuals = [], changing = 0, line = 0, question = '';
+
     function evaluateToss(input) {
       let heads = [...input.toUpperCase()].filter(c => c === 'H').length;
       return [6, 7, 8, 9][heads];
-    }
-
-    function generateToss() {
-      return Array.from({ length: 3 }, () => Math.random() < 0.5 ? 'H' : 'T').join('');
     }
 
     function getVisual(val) {
       return { 6: "___x___", 7: "_______", 8: "___ ___", 9: "___o___" }[val];
     }
 
-    function toBinary(lines) {
-      return lines.reduceRight((acc, l) => (acc << 1) | (l === 7 || l === 9 ? 1 : 0), 0);
+    function toBinary(vals) {
+      return vals.reduceRight((acc, val) => (acc << 1) | ((val === 7 || val === 9) ? 1 : 0), 0);
     }
 
-    function startReading() {
-      const qInput = document.getElementById('question').value.trim();
-      const question = qInput || dilemmas[Math.floor(Math.random() * dilemmas.length)];
-      let output = `Your dilemma: ${question}\n\n`;
-
-      const primaryVals = [], secondaryVals = [], visuals = [], secondaryVisuals = [];
-      let changing = 0;
-
-      for (let i = 0; i < 6; i++) {
-        const input = document.getElementById(`line${i + 1}`).value.trim().toUpperCase();
-        const toss = /^([HT]{3})$/.test(input) ? input : generateToss();
-        const val = evaluateToss(toss);
-        const secVal = (val === 6) ? 7 : (val === 9) ? 8 : val;
-
-        primaryVals[i] = val;
-        secondaryVals[i] = secVal;
-        visuals[i] = getVisual(val);
-        secondaryVisuals[i] = getVisual(secVal);
-
-        if (val === 6 || val === 9) changing++;
-
-        output += `→ Line ${i + 1}: ${toss} = ${val} → ${visuals[i]}\n`;
+    function submitLine() {
+      if (line === 0) {
+        const qInput = document.getElementById('question').value.trim();
+        question = qInput || dilemmas[Math.floor(Math.random() * dilemmas.length)];
+        document.getElementById('output').textContent = `Your dilemma: ${question}\n\n`;
       }
 
+      const input = document.getElementById('lineInput').value.trim().toUpperCase();
+      const toss = /^([HT]{3})$/.test(input) ? input : Array.from({ length: 3 }, () => Math.random() < 0.5 ? 'H' : 'T').join('');
+      const val = evaluateToss(toss);
+      const secVal = (val === 6) ? 7 : (val === 9) ? 8 : val;
+
+      primaryVals[line] = val;
+      secondaryVals[line] = secVal;
+      visuals[line] = getVisual(val);
+      secondaryVisuals[line] = getVisual(secVal);
+      if (val === 6 || val === 9) changing++;
+
+      document.getElementById('output').textContent += `→ Line ${line + 1}: ${toss} = ${val} → ${visuals[line]}\n`;
+      line++;
+
+      if (line === 6) displayReading();
+      else document.getElementById('lineNum').textContent = line + 1;
+
+      document.getElementById('lineInput').value = '';
+    }
+
+    function displayReading() {
       const primaryIndex = toBinary(primaryVals);
       const secondaryIndex = toBinary(secondaryVals);
       const primaryHex = hexagrams[primaryIndex];
       const secondaryHex = hexagrams[secondaryIndex];
+      let output = document.getElementById('output').textContent;
 
       output += `\nPrimary Hexagram:\n${visuals.slice().reverse().join('\n')}\n#${primaryHex.number} - ${primaryHex.ch} (${primaryHex.py})\n`;
       output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${primaryHex.number}\n`;
@@ -151,6 +145,19 @@
 
       output += `\nEmbrace the ongoing process of change.`;
       document.getElementById('output').textContent = output;
+    }
+
+    function resetReading() {
+      primaryVals = [];
+      secondaryVals = [];
+      visuals = [];
+      secondaryVisuals = [];
+      changing = 0;
+      line = 0;
+      question = '';
+      document.getElementById('output').textContent = '';
+      document.getElementById('lineNum').textContent = '1';
+      document.getElementById('lineInput').value = '';
     }
   </script>
 </body>
