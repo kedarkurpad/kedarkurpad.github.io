@@ -25,16 +25,31 @@
 </head>
 <body>
   <h1>I Ching Reading</h1>
+
+  <!-- Input for dilemma -->
   <label for="question">Enter your dilemma:</label><br />
-  <input type="text" id="question" placeholder="Or leave blank for random" size="50" /><br />
-  <button onclick="startReading()">Begin</button>
+  <input type="text" id="question" placeholder="Or leave blank for random" size="50" /><br /><br />
+
+  <!-- Inputs for six tosses -->
+  <div id="tossInputs">
+    <p>Enter 3 coins per line (H/T), bottom to top:</p>
+    <div>Line 1: <input type="text" id="line1" size="4" placeholder="e.g. HHT"></div>
+    <div>Line 2: <input type="text" id="line2" size="4"></div>
+    <div>Line 3: <input type="text" id="line3" size="4"></div>
+    <div>Line 4: <input type="text" id="line4" size="4"></div>
+    <div>Line 5: <input type="text" id="line5" size="4"></div>
+    <div>Line 6: <input type="text" id="line6" size="4"></div>
+  </div>
+
+  <br />
+  <button onclick="startReading()">Get Reading</button>
   <pre id="output"></pre>
 
   <script>
     const hexagrams = [
       { num: 1, ch: "\u4E7E", py: "Qi\u00e1n" },
       { num: 2, ch: "\u5764", py: "K\u016bn" },
-      // ... add all 64 hexagrams here (abbreviated for brevity)
+      // ... add all 64 hexagrams here (fill in from your full list)
       { num: 64, ch: "\u672A\u6D4E", py: "W\u00e8i J\u00ec" }
     ];
 
@@ -60,7 +75,7 @@
     }
 
     function generateToss() {
-      return Array.from({length: 3}, () => Math.random() < 0.5 ? 'H' : 'T').join('');
+      return Array.from({ length: 3 }, () => Math.random() < 0.5 ? 'H' : 'T').join('');
     }
 
     function getVisual(val) {
@@ -83,8 +98,10 @@
       let changing = 0;
 
       for (let i = 0; i < 6; i++) {
-        const toss = generateToss();
+        const input = document.getElementById(`line${i + 1}`).value.trim().toUpperCase();
+        const toss = /^([HT]{3})$/.test(input) ? input : generateToss();
         const val = evaluateToss(toss);
+
         primaryVals[i] = val;
         visuals[i] = getVisual(val);
 
