@@ -31,142 +31,104 @@
   <pre id="output"></pre>
 
   <script>
-  const hexagrams = [
-  { number: 1, name_chinese: "乾", name_pinyin: "Qián" },
-  { number: 2, name_chinese: "坤", name_pinyin: "Kūn" },
-  { number: 3, name_chinese: "屯", name_pinyin: "Zhūn" },
-  { number: 4, name_chinese: "蒙", name_pinyin: "Méng" },
-  { number: 5, name_chinese: "需", name_pinyin: "Xū" },
-  { number: 6, name_chinese: "讼", name_pinyin: "Sòng" },
-  { number: 7, name_chinese: "师", name_pinyin: "Shī" },
-  { number: 8, name_chinese: "比", name_pinyin: "Bǐ" },
-  { number: 9, name_chinese: "小畜", name_pinyin: "Xiǎo Chù" },
-  { number: 10, name_chinese: "履", name_pinyin: "Lǚ" },
-  { number: 11, name_chinese: "泰", name_pinyin: "Tài" },
-  { number: 12, name_chinese: "否", name_pinyin: "Pǐ" },
-  { number: 13, name_chinese: "同人", name_pinyin: "Tóng Rén" },
-  { number: 14, name_chinese: "大有", name_pinyin: "Dà Yǒu" },
-  { number: 15, name_chinese: "谦", name_pinyin: "Qiān" },
-  { number: 16, name_chinese: "豫", name_pinyin: "Yù" },
-  { number: 17, name_chinese: "随", name_pinyin: "Suí" },
-  { number: 18, name_chinese: "蛊", name_pinyin: "Gǔ" },
-  { number: 19, name_chinese: "临", name_pinyin: "Lín" },
-  { number: 20, name_chinese: "观", name_pinyin: "Guān" },
-  { number: 21, name_chinese: "噬嗑", name_pinyin: "Shì Kè" },
-  { number: 22, name_chinese: "贲", name_pinyin: "Bì" },
-  { number: 23, name_chinese: "剥", name_pinyin: "Bō" },
-  { number: 24, name_chinese: "复", name_pinyin: "Fù" },
-  { number: 25, name_chinese: "无妄", name_pinyin: "Wú Wàng" },
-  { number: 26, name_chinese: "大畜", name_pinyin: "Dà Chù" },
-  { number: 27, name_chinese: "颐", name_pinyin: "Yí" },
-  { number: 28, name_chinese: "大过", name_pinyin: "Dà Guò" },
-  { number: 29, name_chinese: "坎", name_pinyin: "Kǎn" },
-  { number: 30, name_chinese: "离", name_pinyin: "Lí" },
-  { number: 31, name_chinese: "咸", name_pinyin: "Xián" },
-  { number: 32, name_chinese: "恒", name_pinyin: "Héng" },
-  { number: 33, name_chinese: "遁", name_pinyin: "Dùn" },
-  { number: 34, name_chinese: "大壮", name_pinyin: "Dà Zhuàng" },
-  { number: 35, name_chinese: "晋", name_pinyin: "Jìn" },
-  { number: 36, name_chinese: "明夷", name_pinyin: "Míng Yí" },
-  { number: 37, name_chinese: "家人", name_pinyin: "Jiā Rén" },
-  { number: 38, name_chinese: "睽", name_pinyin: "Kuí" },
-  { number: 39, name_chinese: "蹇", name_pinyin: "Jiǎn" },
-  { number: 40, name_chinese: "解", name_pinyin: "Xiè" },
-  { number: 41, name_chinese: "损", name_pinyin: "Sǔn" },
-  { number: 42, name_chinese: "益", name_pinyin: "Yì" },
-  { number: 43, name_chinese: "夬", name_pinyin: "Guài" },
-  { number: 44, name_chinese: "姤", name_pinyin: "Gòu" },
-  { number: 45, name_chinese: "萃", name_pinyin: "Cuì" },
-  { number: 46, name_chinese: "升", name_pinyin: "Shēng" },
-  { number: 47, name_chinese: "困", name_pinyin: "Kùn" },
-  { number: 48, name_chinese: "井", name_pinyin: "Jǐng" },
-  { number: 49, name_chinese: "革", name_pinyin: "Gé" },
-  { number: 50, name_chinese: "鼎", name_pinyin: "Dǐng" },
-  { number: 51, name_chinese: "震", name_pinyin: "Zhèn" },
-  { number: 52, name_chinese: "艮", name_pinyin: "Gèn" },
-  { number: 53, name_chinese: "渐", name_pinyin: "Jiàn" },
-  { number: 54, name_chinese: "归妹", name_pinyin: "Guī Mèi" },
-  { number: 55, name_chinese: "丰", name_pinyin: "Fēng" },
-  { number: 56, name_chinese: "旅", name_pinyin: "Lǚ" },
-  { number: 57, name_chinese: "巽", name_pinyin: "Xùn" },
-  { number: 58, name_chinese: "兑", name_pinyin: "Duì" },
-  { number: 59, name_chinese: "涣", name_pinyin: "Huàn" },
-  { number: 60, name_chinese: "节", name_pinyin: "Jié" },
-  { number: 61, name_chinese: "中孚", name_pinyin: "Zhōng Fú" },
-  { number: 62, name_chinese: "小过", name_pinyin: "Xiǎo Guò" },
-  { number: 63, name_chinese: "既济", name_pinyin: "Jì Jì" },
-  { number: 64, name_chinese: "未济", name_pinyin: "Wèi Jì" }
-];
+    const hexagrams = [
+      { number: 1, name_chinese: "乾", name_pinyin: "Qián" }, { number: 2, name_chinese: "坤", name_pinyin: "Kūn" },
+      { number: 3, name_chinese: "屯", name_pinyin: "Zhūn" }, { number: 4, name_chinese: "蒙", name_pinyin: "Méng" },
+      { number: 5, name_chinese: "需", name_pinyin: "Xū" }, { number: 6, name_chinese: "讼", name_pinyin: "Sòng" },
+      { number: 7, name_chinese: "师", name_pinyin: "Shī" }, { number: 8, name_chinese: "比", name_pinyin: "Bǐ" },
+      { number: 9, name_chinese: "小畜", name_pinyin: "Xiǎo Chù" }, { number: 10, name_chinese: "履", name_pinyin: "Lǚ" },
+      { number: 11, name_chinese: "泰", name_pinyin: "Tài" }, { number: 12, name_chinese: "否", name_pinyin: "Pǐ" },
+      { number: 13, name_chinese: "同人", name_pinyin: "Tóng Rén" }, { number: 14, name_chinese: "大有", name_pinyin: "Dà Yǒu" },
+      { number: 15, name_chinese: "谦", name_pinyin: "Qiān" }, { number: 16, name_chinese: "豫", name_pinyin: "Yù" },
+      { number: 17, name_chinese: "随", name_pinyin: "Suí" }, { number: 18, name_chinese: "蛊", name_pinyin: "Gǔ" },
+      { number: 19, name_chinese: "临", name_pinyin: "Lín" }, { number: 20, name_chinese: "观", name_pinyin: "Guān" },
+      { number: 21, name_chinese: "噬嗑", name_pinyin: "Shì Kè" }, { number: 22, name_chinese: "贲", name_pinyin: "Bì" },
+      { number: 23, name_chinese: "剥", name_pinyin: "Bō" }, { number: 24, name_chinese: "复", name_pinyin: "Fù" },
+      { number: 25, name_chinese: "无妄", name_pinyin: "Wú Wàng" }, { number: 26, name_chinese: "大畜", name_pinyin: "Dà Chù" },
+      { number: 27, name_chinese: "颐", name_pinyin: "Yí" }, { number: 28, name_chinese: "大过", name_pinyin: "Dà Guò" },
+      { number: 29, name_chinese: "坎", name_pinyin: "Kǎn" }, { number: 30, name_chinese: "离", name_pinyin: "Lí" },
+      { number: 31, name_chinese: "咸", name_pinyin: "Xián" }, { number: 32, name_chinese: "恒", name_pinyin: "Héng" },
+      { number: 33, name_chinese: "遁", name_pinyin: "Dùn" }, { number: 34, name_chinese: "大壮", name_pinyin: "Dà Zhuàng" },
+      { number: 35, name_chinese: "晋", name_pinyin: "Jìn" }, { number: 36, name_chinese: "明夷", name_pinyin: "Míng Yí" },
+      { number: 37, name_chinese: "家人", name_pinyin: "Jiā Rén" }, { number: 38, name_chinese: "睽", name_pinyin: "Kuí" },
+      { number: 39, name_chinese: "蹇", name_pinyin: "Jiǎn" }, { number: 40, name_chinese: "解", name_pinyin: "Xiè" },
+      { number: 41, name_chinese: "损", name_pinyin: "Sǔn" }, { number: 42, name_chinese: "益", name_pinyin: "Yì" },
+      { number: 43, name_chinese: "夬", name_pinyin: "Guài" }, { number: 44, name_chinese: "姤", name_pinyin: "Gòu" },
+      { number: 45, name_chinese: "萃", name_pinyin: "Cuì" }, { number: 46, name_chinese: "升", name_pinyin: "Shēng" },
+      { number: 47, name_chinese: "困", name_pinyin: "Kùn" }, { number: 48, name_chinese: "井", name_pinyin: "Jǐng" },
+      { number: 49, name_chinese: "革", name_pinyin: "Gé" }, { number: 50, name_chinese: "鼎", name_pinyin: "Dǐng" },
+      { number: 51, name_chinese: "震", name_pinyin: "Zhèn" }, { number: 52, name_chinese: "艮", name_pinyin: "Gèn" },
+      { number: 53, name_chinese: "渐", name_pinyin: "Jiàn" }, { number: 54, name_chinese: "归妹", name_pinyin: "Guī Mèi" },
+      { number: 55, name_chinese: "丰", name_pinyin: "Fēng" }, { number: 56, name_chinese: "旅", name_pinyin: "Lǚ" },
+      { number: 57, name_chinese: "巽", name_pinyin: "Xùn" }, { number: 58, name_chinese: "兑", name_pinyin: "Duì" },
+      { number: 59, name_chinese: "涣", name_pinyin: "Huàn" }, { number: 60, name_chinese: "节", name_pinyin: "Jié" },
+      { number: 61, name_chinese: "中孚", name_pinyin: "Zhōng Fú" }, { number: 62, name_chinese: "小过", name_pinyin: "Xiǎo Guò" },
+      { number: 63, name_chinese: "既济", name_pinyin: "Jì Jì" }, { number: 64, name_chinese: "未济", name_pinyin: "Wèi Jì" }
+    ];
 
     const dilemmas = [
-      "financial uncertainty",
-      "relationship tension",
-      "difficult boss",
-      "negative mindset",
-      "health concerns",
-      "career burnout",
-      "creative block",
-      "jealousy",
-      "existential dread",
-      "loss of direction"
+      "financial uncertainty", "relationship tension", "difficult boss", "negative mindset",
+      "health concerns", "career burnout", "creative block", "jealousy",
+      "existential dread", "loss of direction"
     ];
 
     function evaluateToss(toss) {
-      let heads = [...toss].filter(c => c.toUpperCase() === 'H').length;
-      if (heads === 3) return 9;
-      if (heads === 2) return 8;
-      if (heads === 1) return 7;
-      return 6;
+      const heads = toss.toUpperCase().split('').filter(c => c === 'H').length;
+      return [6,7,8,9][heads];
     }
 
     function generateToss() {
-      return Array.from({length: 3}, () => Math.random() < 0.5 ? 'H' : 'T').join('');
+      return Array.from({ length: 3 }, () => Math.random() < 0.5 ? 'H' : 'T').join('');
     }
 
     function getVisual(val) {
-      if (val === 6) return "___x___";
-      if (val === 7) return "_______";
-      if (val === 8) return "___ ___";
-      if (val === 9) return "___o___";
+      return { 6: "___x___", 7: "_______", 8: "___ ___", 9: "___o___" }[val];
     }
 
-    function toBinary(lines) {
-      return lines.reduceRight((acc, l) => (acc << 1) | (l === 7 || l === 9 ? 1 : 0), 0);
+    function toBinary(vals) {
+      return vals.reduceRight((acc, val) => (acc << 1) | ((val === 7 || val === 9) ? 1 : 0), 0);
     }
 
     function startReading() {
-      const qInput = document.getElementById('question').value.trim();
-      const question = qInput || dilemmas[Math.floor(Math.random() * dilemmas.length)];
-      let output = `Your dilemma: ${question}\n\n`;
+      const questionInput = document.getElementById('question').value.trim();
+      const question = questionInput || dilemmas[Math.floor(Math.random() * dilemmas.length)];
 
-      const primaryVals = [], secondaryVals = [], visuals = [];
-      let changing = 0;
+      let primary_vals = [], secondary_vals = [], visuals = [], secondary_visuals = [], changing = 0;
+      let output = `I Ching Reading\n\nYour dilemma: ${question}\n\nToss the coins for each line (bottom to top):\n`;
 
       for (let i = 0; i < 6; i++) {
         const toss = generateToss();
         const val = evaluateToss(toss);
-        primaryVals[i] = val;
-        visuals[i] = getVisual(val);
+        const sec_val = (val === 6) ? 7 : (val === 9) ? 8 : val;
+
+        primary_vals[i] = val;
+        secondary_vals[i] = sec_val;
 
         if (val === 6 || val === 9) changing++;
-        secondaryVals[i] = (val === 6) ? 7 : (val === 9) ? 8 : val;
 
-        output += `Line ${i + 1}: ${toss} = ${val} → ${visuals[i]}\n`;
+        visuals[i] = getVisual(val);
+        secondary_visuals[i] = getVisual(sec_val);
+
+        output += `→ Line ${i + 1}: ${toss} = ${val} → ${visuals[i]}\n`;
       }
 
-      const primaryIndex = toBinary(primaryVals);
-      const primaryHex = hexagrams[primaryIndex] || { num: primaryIndex + 1, ch: "?", py: "Unknown" };
+      const primaryIndex = toBinary(primary_vals);
+      const secondaryIndex = toBinary(secondary_vals);
+      const primaryHex = hexagrams[primaryIndex];
+      const secondaryHex = hexagrams[secondaryIndex];
 
-      output += `\nPrimary Hexagram:\n${visuals.slice().reverse().join('\n')}\n#${primaryHex.num} - ${primaryHex.ch} (${primaryHex.py})\n`;
-      output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${primaryHex.num}\n`;
+      output += `\nPrimary Hexagram:\n${visuals.slice().reverse().join('\n')}\n#${primaryHex.number} - ${primaryHex.name_chinese} (${primaryHex.name_pinyin})\n`;
+      output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${primaryHex.number}\n`;
 
       if (changing > 0) {
-        const secondaryBinary = toBinary(secondaryVals);
-        const secVisuals = secondaryVals.map(getVisual);
-        const secHex = hexagrams[secondaryBinary] || { num: secondaryBinary + 1, ch: "?", py: "Unknown" };
+        output += `\nChanging Lines:\n`;
+        primary_vals.forEach((val, i) => {
+          if (val === 6) output += `Line ${i + 1}: Yin → Yang\n`;
+          else if (val === 9) output += `Line ${i + 1}: Yang → Yin\n`;
+        });
 
-        output += `\nSecondary Hexagram:\n${secVisuals.slice().reverse().join('\n')}\n#${secHex.num} - ${secHex.ch} (${secHex.py})\n`;
-        output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${secHex.num}\n`;
+        output += `\nSecondary Hexagram:\n${secondary_visuals.slice().reverse().join('\n')}\n#${secondaryHex.number} - ${secondaryHex.name_chinese} (${secondaryHex.name_pinyin})\n`;
+        output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${secondaryHex.number}\n`;
       } else {
         output += `\nNo changing lines — this reading contains only the primary hexagram.\n`;
       }
