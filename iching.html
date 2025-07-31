@@ -47,31 +47,49 @@
 
   <script>
     const hexagrams = [
-      { num: 1, ch: "\u4E7E", py: "Qi\u00e1n" },
-      { num: 2, ch: "\u5764", py: "K\u016bn" },
-      // ... add all 64 hexagrams here (fill in from your full list)
-      { num: 64, ch: "\u672A\u6D4E", py: "W\u00e8i J\u00ec" }
+      { number: 1, ch: "乾", py: "Qián" }, { number: 2, ch: "坤", py: "Kūn" },
+      { number: 3, ch: "屯", py: "Zhūn" }, { number: 4, ch: "蒙", py: "Méng" },
+      { number: 5, ch: "需", py: "Xū" }, { number: 6, ch: "讼", py: "Sòng" },
+      { number: 7, ch: "师", py: "Shī" }, { number: 8, ch: "比", py: "Bǐ" },
+      { number: 9, ch: "小畜", py: "Xiǎo Chù" }, { number: 10, ch: "履", py: "Lǚ" },
+      { number: 11, ch: "泰", py: "Tài" }, { number: 12, ch: "否", py: "Pǐ" },
+      { number: 13, ch: "同人", py: "Tóng Rén" }, { number: 14, ch: "大有", py: "Dà Yǒu" },
+      { number: 15, ch: "谦", py: "Qiān" }, { number: 16, ch: "豫", py: "Yù" },
+      { number: 17, ch: "随", py: "Suí" }, { number: 18, ch: "蛊", py: "Gǔ" },
+      { number: 19, ch: "临", py: "Lín" }, { number: 20, ch: "观", py: "Guān" },
+      { number: 21, ch: "噬嗑", py: "Shì Kè" }, { number: 22, ch: "贲", py: "Bì" },
+      { number: 23, ch: "剥", py: "Bō" }, { number: 24, ch: "复", py: "Fù" },
+      { number: 25, ch: "无妄", py: "Wú Wàng" }, { number: 26, ch: "大畜", py: "Dà Chù" },
+      { number: 27, ch: "颐", py: "Yí" }, { number: 28, ch: "大过", py: "Dà Guò" },
+      { number: 29, ch: "坎", py: "Kǎn" }, { number: 30, ch: "离", py: "Lí" },
+      { number: 31, ch: "咸", py: "Xián" }, { number: 32, ch: "恒", py: "Héng" },
+      { number: 33, ch: "遁", py: "Dùn" }, { number: 34, ch: "大壮", py: "Dà Zhuàng" },
+      { number: 35, ch: "晋", py: "Jìn" }, { number: 36, ch: "明夷", py: "Míng Yí" },
+      { number: 37, ch: "家人", py: "Jiā Rén" }, { number: 38, ch: "睽", py: "Kuí" },
+      { number: 39, ch: "蹇", py: "Jiǎn" }, { number: 40, ch: "解", py: "Xiè" },
+      { number: 41, ch: "损", py: "Sǔn" }, { number: 42, ch: "益", py: "Yì" },
+      { number: 43, ch: "夬", py: "Guài" }, { number: 44, ch: "姤", py: "Gòu" },
+      { number: 45, ch: "萃", py: "Cuì" }, { number: 46, ch: "升", py: "Shēng" },
+      { number: 47, ch: "困", py: "Kùn" }, { number: 48, ch: "井", py: "Jǐng" },
+      { number: 49, ch: "革", py: "Gé" }, { number: 50, ch: "鼎", py: "Dǐng" },
+      { number: 51, ch: "震", py: "Zhèn" }, { number: 52, ch: "艮", py: "Gèn" },
+      { number: 53, ch: "渐", py: "Jiàn" }, { number: 54, ch: "归妹", py: "Guī Mèi" },
+      { number: 55, ch: "丰", py: "Fēng" }, { number: 56, ch: "旅", py: "Lǚ" },
+      { number: 57, ch: "巽", py: "Xùn" }, { number: 58, ch: "兑", py: "Duì" },
+      { number: 59, ch: "涣", py: "Huàn" }, { number: 60, ch: "节", py: "Jié" },
+      { number: 61, ch: "中孚", py: "Zhōng Fú" }, { number: 62, ch: "小过", py: "Xiǎo Guò" },
+      { number: 63, ch: "既济", py: "Jì Jì" }, { number: 64, ch: "未济", py: "Wèi Jì" }
     ];
 
     const dilemmas = [
-      "financial uncertainty",
-      "relationship tension",
-      "difficult boss",
-      "negative mindset",
-      "health concerns",
-      "career burnout",
-      "creative block",
-      "jealousy",
-      "existential dread",
-      "loss of direction"
+      "financial uncertainty", "relationship tension", "difficult boss", "negative mindset",
+      "health concerns", "career burnout", "creative block", "jealousy",
+      "existential dread", "loss of direction"
     ];
 
-    function evaluateToss(toss) {
-      let heads = [...toss].filter(c => c.toUpperCase() === 'H').length;
-      if (heads === 3) return 9;
-      if (heads === 2) return 8;
-      if (heads === 1) return 7;
-      return 6;
+    function evaluateToss(input) {
+      let heads = [...input.toUpperCase()].filter(c => c === 'H').length;
+      return [6, 7, 8, 9][heads];
     }
 
     function generateToss() {
@@ -79,10 +97,7 @@
     }
 
     function getVisual(val) {
-      if (val === 6) return "___x___";
-      if (val === 7) return "_______";
-      if (val === 8) return "___ ___";
-      if (val === 9) return "___o___";
+      return { 6: "___x___", 7: "_______", 8: "___ ___", 9: "___o___" }[val];
     }
 
     function toBinary(lines) {
@@ -94,36 +109,42 @@
       const question = qInput || dilemmas[Math.floor(Math.random() * dilemmas.length)];
       let output = `Your dilemma: ${question}\n\n`;
 
-      const primaryVals = [], secondaryVals = [], visuals = [];
+      const primaryVals = [], secondaryVals = [], visuals = [], secondaryVisuals = [];
       let changing = 0;
 
       for (let i = 0; i < 6; i++) {
         const input = document.getElementById(`line${i + 1}`).value.trim().toUpperCase();
         const toss = /^([HT]{3})$/.test(input) ? input : generateToss();
         const val = evaluateToss(toss);
+        const secVal = (val === 6) ? 7 : (val === 9) ? 8 : val;
 
         primaryVals[i] = val;
+        secondaryVals[i] = secVal;
         visuals[i] = getVisual(val);
+        secondaryVisuals[i] = getVisual(secVal);
 
         if (val === 6 || val === 9) changing++;
-        secondaryVals[i] = (val === 6) ? 7 : (val === 9) ? 8 : val;
 
-        output += `Line ${i + 1}: ${toss} = ${val} → ${visuals[i]}\n`;
+        output += `→ Line ${i + 1}: ${toss} = ${val} → ${visuals[i]}\n`;
       }
 
       const primaryIndex = toBinary(primaryVals);
-      const primaryHex = hexagrams[primaryIndex] || { num: primaryIndex + 1, ch: "?", py: "Unknown" };
+      const secondaryIndex = toBinary(secondaryVals);
+      const primaryHex = hexagrams[primaryIndex];
+      const secondaryHex = hexagrams[secondaryIndex];
 
-      output += `\nPrimary Hexagram:\n${visuals.slice().reverse().join('\n')}\n#${primaryHex.num} - ${primaryHex.ch} (${primaryHex.py})\n`;
-      output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${primaryHex.num}\n`;
+      output += `\nPrimary Hexagram:\n${visuals.slice().reverse().join('\n')}\n#${primaryHex.number} - ${primaryHex.ch} (${primaryHex.py})\n`;
+      output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${primaryHex.number}\n`;
 
       if (changing > 0) {
-        const secondaryBinary = toBinary(secondaryVals);
-        const secVisuals = secondaryVals.map(getVisual);
-        const secHex = hexagrams[secondaryBinary] || { num: secondaryBinary + 1, ch: "?", py: "Unknown" };
+        output += `\nChanging Lines:\n`;
+        primaryVals.forEach((val, i) => {
+          if (val === 6) output += `Line ${i + 1}: Yin → Yang\n`;
+          else if (val === 9) output += `Line ${i + 1}: Yang → Yin\n`;
+        });
 
-        output += `\nSecondary Hexagram:\n${secVisuals.slice().reverse().join('\n')}\n#${secHex.num} - ${secHex.ch} (${secHex.py})\n`;
-        output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${secHex.num}\n`;
+        output += `\nSecondary Hexagram:\n${secondaryVisuals.slice().reverse().join('\n')}\n#${secondaryHex.number} - ${secondaryHex.ch} (${secondaryHex.py})\n`;
+        output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${secondaryHex.number}\n`;
       } else {
         output += `\nNo changing lines — this reading contains only the primary hexagram.\n`;
       }
