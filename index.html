@@ -3,66 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kedar Kurpad | Portfolio</title>
+  <title>I Ching Web Applet</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 40px;
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
     }
-    h1, h2 {
-      margin-top: 0;
+    input, button {
+      font-size: 1rem;
+      padding: 0.5rem;
+      margin: 0.25rem 0;
     }
-    p {
-      max-width: 800px;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      margin-bottom: 10px;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .contact a {
-      text-decoration: none;
-      font-weight: bold;
-      margin-right: 15px;
+    pre {
+      background: #f9f9f9;
+      padding: 1rem;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Kedar Kurpad</h1>
-    <p>Project and Data Professional | Analysis | Forecasting | Visualization</p>
+  <h1>I Ching Reading</h1>
+  <label for="question">Enter your dilemma:</label><br />
+  <input type="text" id="question" placeholder="Or leave blank for random" size="50" /><br />
+  <button onclick="startReading()">Begin</button>
+  <pre id="output"></pre>
 
-    <p>
-      10+ years of experience in project management, data analysis, and business strategy.<br>
-      
-      <br>Exposure to social mobile app feed algorithm design, IoT consumer electronics development, UX optimization for public-sector administrative software interfaces, and more.<br>
-      
-      <br>Recently completed coursework focused on applied data science and machine learning, with projects in forecasting, recommendation
-      systems, and NLP.
-    </p>
+  <script>
+    const hexagrams = [
+      { num: 1, ch: "\u4E7E", py: "Qi\u00e1n" },
+      { num: 2, ch: "\u5764", py: "K\u016bn" },
+      // ... add all 64 hexagrams here (abbreviated for brevity)
+      { num: 64, ch: "\u672A\u6D4E", py: "W\u00e8i J\u00ec" }
+    ];
 
-    <div class="project">
-      <h2>Projects</h2>
-      <ul>
-        <li>🌞 <strong><a href="https://github.com/kedarkurpad/ClimateForecast">Climate Forecast:</a></strong> Analyzing the relationship between greenhouse gas emissions, GDP growth, and surface temperature anomalies over time.</li> 
-      </ul>
-    </div>
+    const dilemmas = [
+      "financial uncertainty",
+      "relationship tension",
+      "difficult boss",
+      "negative mindset",
+      "health concerns",
+      "career burnout",
+      "creative block",
+      "jealousy",
+      "existential dread",
+      "loss of direction"
+    ];
 
-    <div class="contact">
-      <h2>Contact</h2>
-      <a href="https://github.com/kedarkurpad">GitHub</a>
-      <a href="https://linkedin.com/in/kedar-kurpad">LinkedIn</a>
-    </div>
-  </div>
+    function evaluateToss(toss) {
+      let heads = [...toss].filter(c => c.toUpperCase() === 'H').length;
+      if (heads === 3) return 9;
+      if (heads === 2) return 8;
+      if (heads === 1) return 7;
+      return 6;
+    }
+
+    function generateToss() {
+      return Array.from({length: 3}, () => Math.random() < 0.5 ? 'H' : 'T').join('');
+    }
+
+    function getVisual(val) {
+      if (val === 6) return "___x___";
+      if (val === 7) return "_______";
+      if (val === 8) return "___ ___";
+      if (val === 9) return "___o___";
+    }
+
+    function toBinary(lines) {
+      return lines.reduceRight((acc, l) => (acc << 1) | (l === 7 || l === 9 ? 1 : 0), 0);
+    }
+
+    function startReading() {
+      const qInput = document.getElementById('question').value.trim();
+      const question = qInput || dilemmas[Math.floor(Math.random() * dilemmas.length)];
+      let output = `Your dilemma: ${question}\n\n`;
+
+      const primaryVals = [], secondaryVals = [], visuals = [];
+      let changing = 0;
+
+      for (let i = 0; i < 6; i++) {
+        const toss = generateToss();
+        const val = evaluateToss(toss);
+        primaryVals[i] = val;
+        visuals[i] = getVisual(val);
+
+        if (val === 6 || val === 9) changing++;
+        secondaryVals[i] = (val === 6) ? 7 : (val === 9) ? 8 : val;
+
+        output += `Line ${i + 1}: ${toss} = ${val} → ${visuals[i]}\n`;
+      }
+
+      const primaryIndex = toBinary(primaryVals);
+      const primaryHex = hexagrams[primaryIndex] || { num: primaryIndex + 1, ch: "?", py: "Unknown" };
+
+      output += `\nPrimary Hexagram:\n${visuals.slice().reverse().join('\n')}\n#${primaryHex.num} - ${primaryHex.ch} (${primaryHex.py})\n`;
+      output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${primaryHex.num}\n`;
+
+      if (changing > 0) {
+        const secondaryBinary = toBinary(secondaryVals);
+        const secVisuals = secondaryVals.map(getVisual);
+        const secHex = hexagrams[secondaryBinary] || { num: secondaryBinary + 1, ch: "?", py: "Unknown" };
+
+        output += `\nSecondary Hexagram:\n${secVisuals.slice().reverse().join('\n')}\n#${secHex.num} - ${secHex.ch} (${secHex.py})\n`;
+        output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${secHex.num}\n`;
+      } else {
+        output += `\nNo changing lines — this reading contains only the primary hexagram.\n`;
+      }
+
+      output += `\nEmbrace the ongoing process of change.`;
+      document.getElementById('output').textContent = output;
+    }
+  </script>
 </body>
 </html>
