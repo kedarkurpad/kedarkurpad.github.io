@@ -21,13 +21,17 @@
       padding: 1rem;
       white-space: pre-wrap;
     }
+    .line-input {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <h1>I Ching Reading</h1>
   <label for="question">Enter your dilemma:</label><br />
   <input type="text" id="question" placeholder="Or leave blank for random" size="50" /><br />
-  <button onclick="startReading()">Begin</button>
+  <div id="line-prompts"></div>
+  <button onclick="handleStep()" id="step-button">Next</button>
   <pre id="output"></pre>
 
   <script>
@@ -72,9 +76,20 @@
       "existential dread", "loss of direction"
     ];
 
+    let readingState = {
+      question: '',
+      primaryVals: [],
+      secondaryVals: [],
+      visuals: [],
+      secondaryVisuals: [],
+      line: 0,
+      changing: 0,
+      output: ''
+    };
+
     function evaluateToss(toss) {
       const heads = toss.toUpperCase().split('').filter(c => c === 'H').length;
-      return [6,7,8,9][heads];
+      return [6, 7, 8, 9][heads];
     }
 
     function generateToss() {
@@ -89,55 +104,69 @@
       return vals.reduceRight((acc, val) => (acc << 1) | ((val === 7 || val === 9) ? 1 : 0), 0);
     }
 
-    async function startReading() {
-      const questionInput = document.getElementById('question').value.trim();
-      const question = questionInput || dilemmas[Math.floor(Math.random() * dilemmas.length)];
-      let output = `I Ching Reading\n\nYour dilemma: ${question}\n\nToss the coins for each line (bottom to top):\nEnter 3 coins as H/T (e.g., HHT), or leave blank for random.\n\n`;
+    function handleStep() {
+      if (readingState.line === 0) {
+        const qInput = document.getElementById('question').value.trim();
+        readingState.question = qInput || dilemmas[Math.floor(Math.random() * dilemmas.length)];
+        readingState.output = `I Ching Reading\n\nYour dilemma: ${readingState.question}\n\nToss the coins for each line (bottom to top):\n`;
+        document.getElementById('output').textContent = readingState.output;
+      }
 
-      let primary_vals = [], secondary_vals = [], visuals = [], secondary_visuals = [], changing = 0;
+      const lineInputId = `line${readingState.line}`;
+      let inputElem = document.getElementById(lineInputId);
 
-      for (let i = 0; i < 6; i++) {
-        let toss = prompt(`Line ${i + 1} toss (H/T, e.g., HHT or leave blank for random):`) || generateToss();
-        while (!/^([HhTt]{3})$/.test(toss)) {
-          toss = prompt(`Invalid input. Please enter 3 characters H/T (e.g., HHT):`) || generateToss();
+      if (!inputElem) {
+        const container = document.getElementById('line-prompts');
+        container.innerHTML = `<label>Line ${readingState.line + 1} toss (H/T, e.g., HHT):</label><br>
+          <input type="text" id="${lineInputId}" placeholder="or leave blank for random" size="10">`;
+        return;
+      }
+
+      let toss = inputElem.value.trim().toUpperCase();
+      if (!/^([HT]{3})$/.test(toss)) toss = generateToss();
+
+      const val = evaluateToss(toss);
+      const secVal = (val === 6) ? 7 : (val === 9) ? 8 : val;
+
+      readingState.primaryVals[readingState.line] = val;
+      readingState.secondaryVals[readingState.line] = secVal;
+      readingState.visuals[readingState.line] = getVisual(val);
+      readingState.secondaryVisuals[readingState.line] = getVisual(secVal);
+      if (val === 6 || val === 9) readingState.changing++;
+
+      readingState.output += `→ Line ${readingState.line + 1}: ${toss} = ${val} → ${getVisual(val)}\n`;
+      document.getElementById('output').textContent = readingState.output;
+
+      readingState.line++;
+
+      if (readingState.line < 6) {
+        handleStep();
+      } else {
+        const primaryIndex = toBinary(readingState.primaryVals);
+        const secondaryIndex = toBinary(readingState.secondaryVals);
+        const primaryHex = hexagrams[primaryIndex];
+        const secondaryHex = hexagrams[secondaryIndex];
+
+        readingState.output += `\nPrimary Hexagram:\n${readingState.visuals.slice().reverse().join('\n')}\n#${primaryHex.number} - ${primaryHex.name_chinese} (${primaryHex.name_pinyin})\n`;
+        readingState.output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${primaryHex.number}\n`;
+
+        if (readingState.changing > 0) {
+          readingState.output += `\nChanging Lines:\n`;
+          readingState.primaryVals.forEach((val, i) => {
+            if (val === 6) readingState.output += `Line ${i + 1}: Yin → Yang\n`;
+            else if (val === 9) readingState.output += `Line ${i + 1}: Yang → Yin\n`;
+          });
+
+          readingState.output += `\nSecondary Hexagram:\n${readingState.secondaryVisuals.slice().reverse().join('\n')}\n#${secondaryHex.number} - ${secondaryHex.name_chinese} (${secondaryHex.name_pinyin})\n`;
+          readingState.output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${secondaryHex.number}\n`;
+        } else {
+          readingState.output += `\nNo changing lines — this reading contains only the primary hexagram.\n`;
         }
 
-        const val = evaluateToss(toss);
-        const sec_val = (val === 6) ? 7 : (val === 9) ? 8 : val;
-
-        primary_vals[i] = val;
-        secondary_vals[i] = sec_val;
-        visuals[i] = getVisual(val);
-        secondary_visuals[i] = getVisual(sec_val);
-
-        if (val === 6 || val === 9) changing++;
-
-        output += `→ Line ${i + 1}: ${toss.toUpperCase()} = ${val} → ${visuals[i]}\n`;
+        readingState.output += `\nEmbrace the ongoing process of change.`;
+        document.getElementById('output').textContent = readingState.output;
+        document.getElementById('step-button').disabled = true;
       }
-
-      const primaryIndex = toBinary(primary_vals);
-      const secondaryIndex = toBinary(secondary_vals);
-      const primaryHex = hexagrams[primaryIndex];
-      const secondaryHex = hexagrams[secondaryIndex];
-
-      output += `\nPrimary Hexagram:\n${visuals.slice().reverse().join('\n')}\n#${primaryHex.number} - ${primaryHex.name_chinese} (${primaryHex.name_pinyin})\n`;
-      output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${primaryHex.number}\n`;
-
-      if (changing > 0) {
-        output += `\nChanging Lines:\n`;
-        primary_vals.forEach((val, i) => {
-          if (val === 6) output += `Line ${i + 1}: Yin → Yang\n`;
-          else if (val === 9) output += `Line ${i + 1}: Yang → Yin\n`;
-        });
-
-        output += `\nSecondary Hexagram:\n${secondary_visuals.slice().reverse().join('\n')}\n#${secondaryHex.number} - ${secondaryHex.name_chinese} (${secondaryHex.name_pinyin})\n`;
-        output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${secondaryHex.number}\n`;
-      } else {
-        output += `\nNo changing lines — this reading contains only the primary hexagram.\n`;
-      }
-
-      output += `\nEmbrace the ongoing process of change.`;
-      document.getElementById('output').textContent = output;
     }
   </script>
 </body>
