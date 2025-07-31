@@ -89,27 +89,30 @@
       return vals.reduceRight((acc, val) => (acc << 1) | ((val === 7 || val === 9) ? 1 : 0), 0);
     }
 
-    function startReading() {
+    async function startReading() {
       const questionInput = document.getElementById('question').value.trim();
       const question = questionInput || dilemmas[Math.floor(Math.random() * dilemmas.length)];
+      let output = `I Ching Reading\n\nYour dilemma: ${question}\n\nToss the coins for each line (bottom to top):\nEnter 3 coins as H/T (e.g., HHT), or leave blank for random.\n\n`;
 
       let primary_vals = [], secondary_vals = [], visuals = [], secondary_visuals = [], changing = 0;
-      let output = `I Ching Reading\n\nYour dilemma: ${question}\n\nToss the coins for each line (bottom to top):\n`;
 
       for (let i = 0; i < 6; i++) {
-        const toss = generateToss();
+        let toss = prompt(`Line ${i + 1} toss (H/T, e.g., HHT or leave blank for random):`) || generateToss();
+        while (!/^([HhTt]{3})$/.test(toss)) {
+          toss = prompt(`Invalid input. Please enter 3 characters H/T (e.g., HHT):`) || generateToss();
+        }
+
         const val = evaluateToss(toss);
         const sec_val = (val === 6) ? 7 : (val === 9) ? 8 : val;
 
         primary_vals[i] = val;
         secondary_vals[i] = sec_val;
-
-        if (val === 6 || val === 9) changing++;
-
         visuals[i] = getVisual(val);
         secondary_visuals[i] = getVisual(sec_val);
 
-        output += `→ Line ${i + 1}: ${toss} = ${val} → ${visuals[i]}\n`;
+        if (val === 6 || val === 9) changing++;
+
+        output += `→ Line ${i + 1}: ${toss.toUpperCase()} = ${val} → ${visuals[i]}\n`;
       }
 
       const primaryIndex = toBinary(primary_vals);
