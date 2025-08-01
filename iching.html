@@ -135,7 +135,7 @@
       let output = document.getElementById('output').textContent;
 
       output += `\nPrimary Hexagram:\n${visuals.slice().reverse().join('\n')}\n#${primaryHex.number} - ${primaryHex.ch} (${primaryHex.py})\n`;
-      output += `→ https://www.wisdomportal.com/iching/IChing-Wilhelm.html#${primaryHex.number}\n`;
+      output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${primaryHex.number}\n`;
 
       if (changing > 0) {
         output += `\nChanging Lines:\n`;
@@ -145,7 +145,7 @@
         });
 
         output += `\nSecondary Hexagram:\n${secondaryVisuals.slice().reverse().join('\n')}\n#${secondaryHex.number} - ${secondaryHex.ch} (${secondaryHex.py})\n`;
-        output += `→ https://www.wisdomportal.com/iching/IChing-Wilhelm.html#${secondaryHex.number}\n`;
+        output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${secondaryHex.number}\n`;
       } else {
         output += `\nNo changing lines — this reading contains only the primary hexagram.\n`;
       }
