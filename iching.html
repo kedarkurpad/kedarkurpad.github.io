@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>I Ching Web Applet</title>
+  <title>I Ching Web 易經</title>
   <style>
     body {
       font-family: sans-serif;
@@ -24,15 +24,15 @@
   </style>
 </head>
 <body>
-  <h2>I Ching</h2>
+  <h2>i ching | 易經</h2>
 
-  <label for="question">Enter your dilemma:</label><br />
-  <input type="text" id="question" placeholder="Or leave blank for random" size="50" /><br /><br />
+  <label for="question">enter your dilemma:</label><br />
+  <input type="text" id="question" placeholder="(leave blank for random dilemma)" size="50" /><br /><br />
 
-  <label for="lineInput">Enter 3 coins (i.e. 'hht' for 'heads-heads-tails', or 'x' for random) for line <span id="lineNum">1</span>:</label><br />
-  <input type="text" id="lineInput" size="10" placeholder="e.g. HHT or x" /><br />
-  <button onclick="submitLine()">Submit Line</button>
-  <button onclick="resetReading()">Reset</button>
+  <label for="lineInput">enter 3 coins (i.e. 'hht' for 'heads-heads-tails', or 'x' for random) for toss <span id="lineNum">1</span>:</label><br />
+  <input type="text" id="lineInput" size="10" placeholder="(e.g. hht, ttt, x)" /><br />
+  <button onclick="submitLine()">confirm line</button>
+  <button onclick="resetReading()">reset</button>
 
   <pre id="output"></pre>
 
@@ -149,7 +149,7 @@
         output += `\nNo changing lines — this reading contains only the primary hexagram.\n`;
       }
 
-      output += `\nEmbrace the ongoing process of change.`;
+      output += `\nGood luck!`;
       document.getElementById('output').textContent = output;
     }
 
