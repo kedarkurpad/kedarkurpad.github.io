@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Masala Guru</title>
+  <title>मसाला गुरु [Masala Guru]</title>
   <style>
     body {
       font-family: monospace;
@@ -53,16 +53,16 @@
         options: ["Bird", "Fish"]
       },
       "Beans": {
-        result: ["Chole", "Masoor Dal"]
+        result: ["Chole | छोले | چھولے", "Masoor Dal | मसूर दाल | مسور دال"]
       },
       "Cheese": {
-        result: ["Palak Paneer", "Matar Paneer"]
+        result: ["Palak Paneer | पालक पनीर | پالک پنیر", "Matar Paneer | मटर पनीर | مٹر پنیر"]
       },
       "Bird": {
-        result: ["Murgh Tikka", "Murgh Makhani"]
+        result: ["Murgh Tikka | मुर्ग टिक्का | مرغ تکہ", "Murgh Makhani | मुर्ग मक्खनी | مرغ مکھنی"]
       },
       "Fish": {
-        result: ["Goan Prawn Curry", "Fish Fry"]
+        result: ["Goan Prawn Curry | गोअन प्रॉन्स करी | گواہ جھینگا سالن", "Fish Fry | फिश फ्राई | فرائی مچھلی"]
       }
     };
 
@@ -78,7 +78,7 @@
 
       if (node.result) {
         const dish = node.result[Math.floor(Math.random() * node.result.length)];
-        output.textContent = `Masala Guru whispers...\n\nTonight's dish: ${dish}`;
+        output.textContent = `Tonight's dish: ${dish}`;
         box.innerHTML = `<button onclick="restart()">start over</button>`;
       } else {
         const q = document.createElement("p");
