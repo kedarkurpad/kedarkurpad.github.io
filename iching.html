@@ -17,7 +17,7 @@
       margin: 0.25rem 0;
     }
     pre {
-      background: #f9f9f9;
+      background: oklch(80.344% 0.13837 97.741);
       padding: 1rem;
       white-space: pre-wrap;
     }
@@ -29,7 +29,7 @@
   <label for="question">Enter your dilemma:</label><br />
   <input type="text" id="question" placeholder="Or leave blank for random" size="50" /><br /><br />
 
-  <label for="lineInput">Enter 3 coins (H/T or 'x' for random) for line <span id="lineNum">1</span> (bottom to top):</label><br />
+  <label for="lineInput">Enter 3 coins (i.e. 'hht' for 'heads-heads-tails', or 'x' for random) for line <span id="lineNum">1</span> (bottom to top):</label><br />
   <input type="text" id="lineInput" size="4" placeholder="e.g. HHT or x" /><br />
   <button onclick="submitLine()">Submit Line</button>
   <button onclick="resetReading()">Reset</button>
@@ -104,7 +104,7 @@
       if (input === 'X') {
         input = Array.from({ length: 3 }, () => Math.random() < 0.5 ? 'H' : 'T').join('');
       } else if (!/^([HT]{3})$/.test(input)) {
-        alert('Please enter exactly three characters: H, T, or X for random.');
+        alert('Input must be a three character sequence of h (for heads) and t (for tails) or type x once for random');
         return;
       }
 
