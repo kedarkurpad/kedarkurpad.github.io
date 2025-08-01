@@ -13,22 +13,21 @@
       margin: 2rem auto;
       padding: 1rem;
     }
-    input, button {
+    button {
       font-size: 1rem;
-      padding: 0.5rem;
-      margin: 0.25rem 0;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0.5rem 0.5rem 0;
       background-color: #111;
       color: #ff914d;
       border: 1px solid #ff914d;
-    }
-    input::placeholder {
-      color: #ff914d;
+      cursor: pointer;
     }
     pre {
       background: #111;
       color: #ff914d;
       padding: 1rem;
       white-space: pre-wrap;
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -36,77 +35,74 @@
   <h2>Masala Guru</h2>
   <p><em>what’s for dinner?</em></p>
 
-  <label for="spice">spice level (mild, medium, hot):</label><br />
-  <input type="text" id="spice" placeholder="e.g. medium" /><br /><br />
-
-  <label for="pantry">what's in your pantry? (comma separated):</label><br />
-  <input type="text" id="pantry" placeholder="e.g. rice, lentils, tomato, onion" /><br /><br />
-
-  <button onclick="getSuggestion()">ask masala guru</button>
-  <button onclick="resetGuru()">reset</button>
-
+  <div id="questionBox"></div>
   <pre id="output"></pre>
 
   <script>
-    const recipes = [
-      {
-        name: "Chana Masala",
-        spice: "medium",
-        ingredients: ["chickpeas", "onion", "tomato", "garlic", "ginger", "garam masala"]
+    const decisionTree = {
+      start: {
+        question: "Veg or Non-Veg?",
+        options: ["Veg", "Non-Veg"]
       },
-      {
-        name: "Khichdi",
-        spice: "mild",
-        ingredients: ["rice", "lentils", "turmeric", "salt", "ghee"]
+      "Veg": {
+        question: "Beans or Cheese?",
+        options: ["Beans", "Cheese"]
       },
-      {
-        name: "Paneer Tikka",
-        spice: "hot",
-        ingredients: ["paneer", "yogurt", "spices", "bell pepper", "onion"]
+      "Non-Veg": {
+        question: "Bird or Fish?",
+        options: ["Bird", "Fish"]
       },
-      {
-        name: "Masoor Dal",
-        spice: "medium",
-        ingredients: ["red lentils", "onion", "tomato", "garlic", "cumin"]
+      "Beans": {
+        result: ["Chole", "Masoor Dal"]
       },
-      {
-        name: "Aloo Gobi",
-        spice: "mild",
-        ingredients: ["potato", "cauliflower", "turmeric", "ginger", "onion"]
+      "Cheese": {
+        result: ["Palak Paneer", "Matar Paneer"]
+      },
+      "Bird": {
+        result: ["Murgh Tikka", "Murgh Makhani"]
+      },
+      "Fish": {
+        result: ["Goan Prawn Curry", "Fish Fry"]
       }
-    ];
+    };
 
-    function getSuggestion() {
-      const spice = document.getElementById("spice").value.trim().toLowerCase();
-      const pantryInput = document.getElementById("pantry").value.trim().toLowerCase();
+    let currentStep = "start";
 
-      if (!spice || !pantryInput) {
-        alert("please enter both spice level and pantry items.");
-        return;
-      }
-
-      const pantry = pantryInput.split(",").map(i => i.trim());
-
-      const matches = recipes.filter(r =>
-        r.spice === spice &&
-        r.ingredients.every(ing => pantry.includes(ing))
-      );
-
+    function showQuestion(step) {
+      const box = document.getElementById("questionBox");
       const output = document.getElementById("output");
+      box.innerHTML = "";
       output.textContent = "";
 
-      if (matches.length > 0) {
-        output.textContent += `Masala Guru says:\n\nYou can make:\n\n→ ${matches[0].name}\n\nIngredients needed:\n${matches[0].ingredients.join(", ")}`;
+      const node = decisionTree[step];
+
+      if (node.result) {
+        const dish = node.result[Math.floor(Math.random() * node.result.length)];
+        output.textContent = `Masala Guru whispers...\n\nTonight's dish: ${dish}`;
+        box.innerHTML = `<button onclick="restart()">start over</button>`;
       } else {
-        output.textContent = `Masala Guru ponders... 🤔\n\nNo exact match found.\nTry adjusting spice level or adding more ingredients.`;
+        const q = document.createElement("p");
+        q.textContent = node.question;
+        box.appendChild(q);
+
+        node.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.textContent = opt;
+          btn.onclick = () => {
+            currentStep = opt;
+            showQuestion(currentStep);
+          };
+          box.appendChild(btn);
+        });
       }
     }
 
-    function resetGuru() {
-      document.getElementById("spice").value = "";
-      document.getElementById("pantry").value = "";
-      document.getElementById("output").textContent = "";
+    function restart() {
+      currentStep = "start";
+      showQuestion(currentStep);
     }
+
+    showQuestion(currentStep);
   </script>
 </body>
 </html>
