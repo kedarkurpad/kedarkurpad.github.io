@@ -24,13 +24,13 @@
   </style>
 </head>
 <body>
-  <h1>I Ching Reading</h1>
+  <h2>I Ching</h2>
 
   <label for="question">Enter your dilemma:</label><br />
   <input type="text" id="question" placeholder="Or leave blank for random" size="50" /><br /><br />
 
-  <label for="lineInput">Enter 3 coins (H/T) for line <span id="lineNum">1</span> (bottom to top):</label><br />
-  <input type="text" id="lineInput" size="4" placeholder="e.g. HHT" /><br />
+  <label for="lineInput">Enter 3 coins (H/T or 'x' for random) for line <span id="lineNum">1</span> (bottom to top):</label><br />
+  <input type="text" id="lineInput" size="4" placeholder="e.g. HHT or x" /><br />
   <button onclick="submitLine()">Submit Line</button>
   <button onclick="resetReading()">Reset</button>
 
@@ -100,9 +100,15 @@
         document.getElementById('output').textContent = `Your dilemma: ${question}\n\n`;
       }
 
-      const input = document.getElementById('lineInput').value.trim().toUpperCase();
-      const toss = /^([HT]{3})$/.test(input) ? input : Array.from({ length: 3 }, () => Math.random() < 0.5 ? 'H' : 'T').join('');
-      const val = evaluateToss(toss);
+      let input = document.getElementById('lineInput').value.trim().toUpperCase();
+      if (input === 'X') {
+        input = Array.from({ length: 3 }, () => Math.random() < 0.5 ? 'H' : 'T').join('');
+      } else if (!/^([HT]{3})$/.test(input)) {
+        alert('Please enter exactly three characters: H, T, or X for random.');
+        return;
+      }
+
+      const val = evaluateToss(input);
       const secVal = (val === 6) ? 7 : (val === 9) ? 8 : val;
 
       primaryVals[line] = val;
@@ -111,7 +117,7 @@
       secondaryVisuals[line] = getVisual(secVal);
       if (val === 6 || val === 9) changing++;
 
-      document.getElementById('output').textContent += `→ Line ${line + 1}: ${toss} = ${val} → ${visuals[line]}\n`;
+      document.getElementById('output').textContent += `→ Line ${line + 1}: ${input} = ${val} → ${visuals[line]}\n`;
       line++;
 
       if (line === 6) displayReading();
@@ -128,7 +134,7 @@
       let output = document.getElementById('output').textContent;
 
       output += `\nPrimary Hexagram:\n${visuals.slice().reverse().join('\n')}\n#${primaryHex.number} - ${primaryHex.ch} (${primaryHex.py})\n`;
-      output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${primaryHex.number}\n`;
+      output += `→ https://www.wisdomportal.com/iching/IChing-Wilhelm.html#${primaryHex.number}\n`;
 
       if (changing > 0) {
         output += `\nChanging Lines:\n`;
@@ -138,7 +144,7 @@
         });
 
         output += `\nSecondary Hexagram:\n${secondaryVisuals.slice().reverse().join('\n')}\n#${secondaryHex.number} - ${secondaryHex.ch} (${secondaryHex.py})\n`;
-        output += `→ https://www.wisdomportal.com/IChing/IChing-Wilhelm.html#${secondaryHex.number}\n`;
+        output += `→ https://www.wisdomportal.com/iching/IChing-Wilhelm.html#${secondaryHex.number}\n`;
       } else {
         output += `\nNo changing lines — this reading contains only the primary hexagram.\n`;
       }
