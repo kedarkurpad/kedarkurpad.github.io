@@ -114,7 +114,7 @@
       if (input === 'X') {
         input = Array.from({ length: 3 }, () => Math.random() < 0.5 ? 'H' : 'T').join('');
       } else if (!/^([HT]{3})$/.test(input)) {
-        alert('Acceptable inputs in caps or lowercase: hhh, hht, htt, ttt, tht, x');
+        alert('Acceptable inputs in caps or lowercase: hhh, hht, htt, ttt, tht, tth, thh, x');
         return;
       }
 
